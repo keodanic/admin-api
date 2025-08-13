@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{!-- Seu <head> continua igual --}}
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body ...>
+    {{!-- Todo o seu conteúdo e partials --}}
+    {{>preloader}}
+    <div class="flex h-screen overflow-hidden">
+      {{>sidebar}}
+      <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
+        {{>overlay}}
+        {{>header}}
+        <main>
+          {{{body}}}
+        </main>
+      </div>
+    </div>
+
+    <script src="/js/bundle.js"></script>
+
+  </body>
+</html>
