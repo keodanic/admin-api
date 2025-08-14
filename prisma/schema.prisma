@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" 
+  url      = env("DATABASE_URL")
+}
+
+enum ServiceStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  userName  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  clients   Client[]
+
+  services  Service[]
+
+  
+  createdById  Int? 
+  createdBy    User?  @relation("UsersCreated", fields: [createdById], references: [id])
+  createdUsers User[] @relation("UsersCreated")
+}
+
+model Client {
+  id           Int      @id @default(autoincrement())
+  name         String
+  document     String   @unique
+  zipCode      String
+  street       String
+  number       String
+  neighborhood String
+  city         String
+  state        String
+  phone        String
+  whatsapp     String?
+  email        String   @unique
+  enabled      Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  registeredById Int
+  registeredBy   User @relation(fields: [registeredById], references: [id])
+
+
+  services       Service[]
+}
+
+model Service {
+  id          Int           @id @default(autoincrement())
+  title       String        
+  description String?      
+  price       Decimal       
+  status      ServiceStatus @default(PENDING)
+  startDate   DateTime?     
+  endDate     DateTime?     
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+
+  clientId Int
+  client   Client @relation(fields: [clientId], references: [id])
+
+  
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
